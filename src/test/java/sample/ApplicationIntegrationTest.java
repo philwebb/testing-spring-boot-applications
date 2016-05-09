@@ -26,8 +26,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration test for {@link Application} starting on a random port.
@@ -45,7 +44,7 @@ public class ApplicationIntegrationTest {
 	public void test() {
 		ResponseEntity<String> response = this.restTemplate
 				.getForEntity("/{username}/vehicle", String.class, "mickey");
-		assertThat(response.getBody(), containsString("Honda"));
+		assertThat(response.getBody()).contains("Honda");
 	}
 
 }
