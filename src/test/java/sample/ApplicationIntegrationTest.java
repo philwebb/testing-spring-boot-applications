@@ -35,7 +35,7 @@ import static org.junit.Assert.assertThat;
  * @author Phillip Webb
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = Application.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ApplicationIntegrationTest {
 
 	@Value("${local.server.port}")
