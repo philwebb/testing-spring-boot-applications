@@ -19,7 +19,7 @@ package sample;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -38,16 +38,13 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ApplicationIntegrationTest {
 
-	@LocalServerPort
-	private int port;
-
-	private TestRestTemplate restTemplate = new TestRestTemplate();
+	@Autowired
+	private TestRestTemplate restTemplate;
 
 	@Test
 	public void test() {
-		ResponseEntity<String> response = this.restTemplate.getForEntity(
-				"http://localhost:{port}/{username}/vehicle", String.class, this.port,
-				"mickey");
+		ResponseEntity<String> response = this.restTemplate
+				.getForEntity("/{username}/vehicle", String.class, "mickey");
 		assertThat(response.getBody(), containsString("Honda"));
 	}
 
