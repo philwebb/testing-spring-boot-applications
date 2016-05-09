@@ -22,7 +22,6 @@ import sample.service.VehicleDetails;
 import sample.service.VehicleDetailsService;
 import sample.service.VehicleIdentificationNumberNotFoundException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -38,7 +37,6 @@ public class UserVehicleService {
 
 	private final VehicleDetailsService vehicleDetailsService;
 
-	@Autowired
 	public UserVehicleService(UserRepository userRepository,
 			VehicleDetailsService vehicleDetailsService) {
 		this.userRepository = userRepository;
