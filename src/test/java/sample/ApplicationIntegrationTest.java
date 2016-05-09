@@ -20,9 +20,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -35,8 +35,7 @@ import static org.junit.Assert.assertThat;
  * @author Phillip Webb
  */
 @RunWith(SpringRunner.class)
-@WebIntegrationTest(randomPort = true)
-@SpringApplicationConfiguration(Application.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = Application.class)
 public class ApplicationIntegrationTest {
 
 	@Value("${local.server.port}")
