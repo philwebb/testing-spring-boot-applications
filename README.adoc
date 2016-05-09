@@ -1,0 +1,61 @@
+= Testing Spring Boot Applications
+Phillip Webb
+
+This is a sample application used for a talk that shows testing improvements in Spring Boot 1.4.
+Look at the link:script.adoc[talk script] in combination with the https://github.com/philwebb/testing-spring-boot-applications/commits/master[commit history] for a high level overview.
+
+== Running the application
+If you want to run the application locally you'll need to follow these steps:
+
+=== MySQL
+A local MySQL server is required and should be configured using the following commands:
+
+Add a `cars` database and user:
+[source,sql]
+----
+CREATE DATABASE cars;
+CREATE USER 'cars'@'localhost' IDENTIFIED BY 'cars';
+GRANT ALL PRIVILEGES ON cars . * TO 'cars'@'localhost';
+FLUSH PRIVILEGES;
+----
+
+Create a table:
+[source,sql]
+----
+USE cars;
+CREATE TABLE user (id BIGINT NOT NULL AUTO_INCREMENT, username VARCHAR(255), vin VARCHAR(255), PRIMARY KEY (id));
+ALTER TABLE user ADD CONSTRAINT UK_USERNAME UNIQUE (USERNAME);
+----
+
+Insert some data:
+[source,sql]
+----
+INSERT INTO user (username, vin) values ('mickey', '01234567890123456');
+----
+
+=== Mock remote service
+The sample calls a remote REST service that must be running.
+The build includes a http://wiremock.org/[WireMock] version that can be used.
+For some reason the second request to WireMock seems to hang, so make sure you `curl` it at least three times after starting:
+
+[subs="verbatim"]
+----
+mvn -Pwiremock
+curl http://localhost:8081/vs/vehicle/01234567890123456/details
+curl http://localhost:8081/vs/vehicle/01234567890123456/details (will fail, hit Ctrl^C)
+curl http://localhost:8081/vs/vehicle/01234567890123456/details
+----
+
+=== Run the application
+When MySQL and WireMock are running you can type:
+
+[subs="verbatim"]
+----
+mvn spring-boot:run
+----
+
+Test using
+[subs="verbatim"]
+----
+curl http://localhost:8080/mickey/vehicle
+----

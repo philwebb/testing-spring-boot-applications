@@ -1,0 +1,14 @@
+{
+	"request": {
+		"method": "GET",
+		"url": "/vs/vehicle/01234567890123456/details"
+	},
+	"response": {
+		"status": 200,
+		"headers": {
+			"Content-Type": "application/json",
+			"Cache-Control": "no-cache"
+		},
+		"body": "{\"make\" : \"Honda\", \"model\" : \"Civic\"}"
+	}
+}

@@ -1,0 +1,104 @@
+= Testing Spring Boot Applications
+Phillip Webb
+
+== Initial Import
+Introduce the application, show its current form and run the integration test
+
+=== Application overview
+* Explain that this is a Boot 1.3 application
+* Show main `Application` class
+* Show the `domain` package
+** Point out `VehicleIdentificationNumber` and the related `VehicleIdentificationNumberAttributeConverter`
+* Show the `service` package
+** Start with `VehicleDetailsService` then look at `RemoteVehicleDetailsService`
+* Show the `web` package
+** Start with `UserVehicleController`
+** Explain the `UserVehicleService` facade
+
+=== The existing tests
+* Show the single `ApplicationIntegrationTest`
+* Start MySQL and Show the database
+* Start `mvn -Pwiremock`
+* Run `curl -v http://localhost:8081/vs/vehicle/01234567890123456/details` (**three times**)
+* Run the test in the IDE
+
+== Upgrade
+=== Upgrade to Spring Boot 1.4
+* Show the POM.xml change
+* Show that `@GetMapping` is now used instead of `@RequestMapping`
+
+=== Switch SpringJUnit4ClassRunner to SpringRunner
+* Point out the more readable name for SpringJUnit4ClassRunner
+
+=== Migrate to @SpringBootTest
+* Show how `@SpringBootTest` replaces `@WebIntegrationTest` and `@SpringApplicationConfiguration`
+* Initially use the `classes` attribute to load `Application.class`
+
+=== Don't use @SpringBootTest classes attribute
+* Show how the `classes` attribute can often be inferred
+
+=== Use @LocalServerPort in favor of @Value
+* Show how `@LocalServerPort` provides a nice shortcut
+
+=== Use @Autowire `TestRestTemplate` for local port
+* Show how an autowired `TestRestTemplate` removes the need for `@LocalServerPort`
+
+=== Migrate to AssertJ
+* Show the new `assertThat` call
+* Explain the benefits of AssertJ
+* Explain that it's imported by `spring-boot-starter-test`
+
+=== Remove @Autowired on constructors
+* Show how `@Autowired` is no longer needed
+* Explain the benefits of constructor injection with respect to testing
+
+== Add UserVehicleService test
+* Show how `UserVehicleServiceTest` is a standard JUnit test
+* Explain why these are generally the best type of tests to write
+* Briefly cover
+** How the `ExpectedException` `@Rule` works
+** How `@Mock` and BDD Mockito works
+** Why tests are commented like they are
+
+== Add domain layer tests
+* Show how `VehicleIdentificationNumberTest` is another simple JUnit test
+* Show `UserEntityTest`
+** Explain slices
+** Explain about `@AutoConfigure...` meta-annotations
+** Explain use of in-memory database and `@AutoConfigureTestDatabase`
+** Explain `TestEntityManager`
+* Show `UserRepositoryTest`
+** Show that basic queries are working as expected
+* Shutdown MySQL
+* Show how `ApplicationIntegrationTest` now fails
+
+== Use @AutoConfigureTestDatabase on integration test
+* Show how `@AutoConfigureTestDatabase` can be mixed into existing tests
+* Talk about pros and cons of this approach
+
+== Add service layer tests
+* Show the `RemoteVehicleDetailsServiceTest`
+** Explain how `MockRestServiceServer` is used
+** Show the `protected` method trick to attach the mock
+** Show how SpringRunner is not needed
+* Show `VehicleDetailsJsonTest`
+** Explain `@JsonTest`
+** Explain `JacksonTester` (and how it can also be used directly)
+** Show the `json` asserts
+
+== Add Mocks
+* Shutdown wiremock
+* Explain how `ApplicationIntegrationTest` would fails
+* Show @MockBean annotation
+
+== Add Spring MVC @Controller tests
+* Show `UserVehicleControllerTest`
+** Explain how `MockMvc` can be autowired
+** Show `@AutoConfigureMockMvc` meta-annotation
+** Show use of `@MockBean` again and explain benefit for exceptions
+* Show `UserVehicleControllerApplicationTest`
+** Explain that this one also needs the database because it loads the full config
+
+== Add Selenium/HTMLUnit controller tests
+* Show `UserVehicleControllerSeleniumTest`
+* Show `UserVehicleControllerHtmlUnitTest`
